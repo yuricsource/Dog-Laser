@@ -1,0 +1,39 @@
+{
+    "env": {
+        "IDF_TOOLS": "c:/esp/.espressif/tools",
+        "IDF_PATH": "c:/esp/esp-idf",
+        "PROJECT_NAME": "app-hardware-tester"
+    },
+    "configurations": [
+        {
+            "name": "esp32",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${IDF_PATH}",
+                    "${IDF_TOOLS}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "${workspaceFolder}/",
+                "${workspaceFolder}/build/config/",
+                "${workspaceFolder}/build/bootloader/config/",
+                "${workspaceFolder}/../Esp32/Include/Hal/",
+                "${workspaceFolder}/../Esp32/Include/Hal/Camera/",
+                "${workspaceFolder}/../Esp32/Include/Utils",
+                "${workspaceFolder}/../Esp32/Include/Configuration",
+                "${workspaceFolder}/../Esp32/Include/Application/",
+                "${workspaceFolder}/../Esp32/Libraries/**",
+                "${workspaceFolder}/../Esp32/Libraries/freertos-addons/Source/include",
+                "${env:IDF_TOOLS}/**",
+                "${env:IDF_PATH}/components/**"
+            ],
+            "defines": [],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

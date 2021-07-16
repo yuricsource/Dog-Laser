@@ -1,0 +1,8 @@
+{
+    "version": "2.0.0",
+    // "tasks": [{
+    //     "label": "RunOpenocd",
+    //     "command": "", // Could be any other shell command
+    //     "type": "shell"
+    // }]
+}
