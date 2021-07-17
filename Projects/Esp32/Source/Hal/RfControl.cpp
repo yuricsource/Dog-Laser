@@ -35,7 +35,7 @@ bool RfControl::RunCommand(uint8_t commandId, uint8_t count)
 	for (uint8_t i = 0; i < count; i++)
 	{
 		Dwt::DelayMilliseconds(12);
-		_rmt->SetProtocol(Rmt::ProtocolSupported::herculiftRemoteControl);
+		_rmt->SetProtocol(RmtProtocolSupported::herculiftRemoteControl);
 		// first send the 12 pulses
 		_rmt->SetTimeBitOn(440, 500);
 		_rmt->SetTimeBitOff(440, 500);
@@ -48,7 +48,7 @@ bool RfControl::RunCommand(uint8_t commandId, uint8_t count)
 		_rmt->UpdateBuffer(pulses, sizeof(pulses));
 		_rmt->Write(true);
 		Dwt::DelayMilliseconds(3);
-		_rmt->SetProtocol(Rmt::ProtocolSupported::herculiftRemoteControl);
+		_rmt->SetProtocol(RmtProtocolSupported::herculiftRemoteControl);
 		
 		_rmt->SetBitsPerUnit(32);
 		_rmt->SetMaxUnitsToSend(3);

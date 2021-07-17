@@ -24,11 +24,12 @@ Hardware::Hardware() :	_gpio(),
 						_timerInterruptHandler(),
 						_timer0(&_timerInterruptHandler, TimerSelect::Timer0),
 						_timer1(&_timerInterruptHandler, TimerSelect::Timer1),
-						_rmtLeds(&_gpio, Gpio::GpioIndex::Gpio27, RmtChannel::RmtChannel1, Hal::BitsPerLed * Hal::MaxAddressableLeds, Hal::BitsPerLed),
+						_rmt(&_gpio, Gpio::GpioIndex::Gpio27, RmtChannel::RmtChannel1, 1, 1 ),
 						_i2c(&_gpio, Hal::I2cPort::I2c0, Gpio::GpioIndex::Gpio25, Gpio::GpioIndex::Gpio10),
 						_deviceInput(&_gpio, &_adc),
 						_spi(),
-						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c)
+						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
+						_motor1(&_gpio, &_timer0, &_rmt)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -88,7 +89,7 @@ Hardware::Hardware() :	_gpio(),
 	_display.setTextColor(WHITE);
 	_display.setCursor(0,0);
 	_display.display();
-	
+	_motor1.Refresh();
 }
 
 uint32_t Hardware::GetSystemClockBase()

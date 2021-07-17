@@ -7,7 +7,8 @@ namespace Hal
 {
 using Utilities::DebugAssert;
 
-Rmt::Rmt(Gpio *IoPins, Gpio::GpioIndex transmitterPin, RmtChannel channel, uint16_t bufferSize, uint16_t unitSize) : _gpio(IoPins), _transmitterPin(transmitterPin)
+Rmt::Rmt(Gpio *IoPins, Gpio::GpioIndex transmitterPin, RmtChannel channel, uint16_t bufferSize, uint16_t unitSize, RmtProtocolSupported protocol) :
+		_gpio(IoPins), _transmitterPin(transmitterPin), _protocol(protocol)
 {
 	IoPins->ConfigOutput(transmitterPin, Hal::Gpio::OutputType::PullUp);
 	IoPins->SetPull(transmitterPin, Hal::Gpio::Pull::UpDown);
@@ -71,7 +72,7 @@ bool Rmt::SetBitsPerUnit(uint16_t unitSize)
 
 void IRAM_ATTR Rmt::doneOnChannel(rmt_channel_t channel, void * arg)
 {
-	Hal::Rmt::RmtBufferLed* rmtBuffer = (RmtBufferLed*)arg;
+	Hal::Rmt::RmtBuffer* rmtBuffer = (RmtBuffer*)arg;
 	rmtBuffer->Index++;
 	
 	if (rmtBuffer->Index < rmtBuffer->MaxUnitsToSend)
@@ -93,6 +94,9 @@ void Rmt::Write(bool wait)
 	Dwt::DelayMicrosecond(50);
 	_rmtBuffer.Index = 0;
 	ESP_ERROR_CHECK(rmt_write_items(static_cast<rmt_channel_t>(_rmtBuffer.Channel), &_rmtBuffer.Buffer[0], _rmtBuffer.UnitSize, false));
+	
+
+	
 	rmt_register_tx_end_callback(doneOnChannel, &_rmtBuffer);
 
 	if (wait)

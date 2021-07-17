@@ -14,6 +14,15 @@ namespace Hal
 
 using std::array;
 
+enum class RmtProtocolSupported : uint8_t
+{
+	WS2812B,
+	herculiftRemoteControl,
+	ServoMotor,
+	// Max Protol Supported
+	MaxProtocolSupported
+};
+
 enum class RmtChannel : uint8_t
 {
     RmtChannel0 = 0,
