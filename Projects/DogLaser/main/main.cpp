@@ -29,7 +29,6 @@ extern "C" void app_main(void)
 	//ConfigurationAgent::Instance();
 	ApplicationAgent::Instance();
 	ApplicationAgent::Instance()->Initialize();
-	ApplicationAgent::Instance()->GetRemoteReceiverService().Start();
 	//ConfigurationAgent::Instance()->UseDefaultConfiguration();
 
 	for (;;)

@@ -2,7 +2,6 @@
 
 #include "Hardware.h"
 #include "WifiService.h"
-#include "HttpServer.h"
 #include "TimeLimit.h"
 #include "ConfigurationCommon.h"
 #include "BaseConnection.h"

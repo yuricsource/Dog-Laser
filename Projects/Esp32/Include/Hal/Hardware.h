@@ -47,7 +47,6 @@ public:
 	Hardware();
 	~Hardware();
 	Gpio &GetGpio() { return _gpio; }
-	Leds &GetLeds() { return _leds; }
 	Spiffs &GetSpiffs() { return _spiffs; }
 	DebugPort &GetDebugPort() { return _debugPort; }
 	Rng &GetRng() { return _rng; }
@@ -58,15 +57,10 @@ public:
 	Timer &GetTimer0() { return _timer0; }
 	Timer &GetTimer1() { return _timer1; }
 	Adc &GetAdc() { return _adc; }
-	Dac &GetDac() { return _dac; }
-	SdCard &GetSdCard() { return _sdCard; }
 	Rmt &GetRmt(){ return _rmtLeds; }
 	I2c &GetI2c() { return _i2c; }
-	IoExtender& GetIoExtender() { return _ioExtender; }
-	RfControl& GetRfControl() { return _rfControl; }
 	DeviceInput& GetDeviceInput() { return _deviceInput; }
 	Adafruit_SSD1306& GetDisplay() { return _display; }
-	CodeReceiver& GetCodeReceiver() { return _codeReceiver; }
 	uint32_t Milliseconds();
 	void TimerCallback();
 	ResetReason GetResetReason();
@@ -107,21 +101,14 @@ private:
 	WifiDriver _wifiDriver;
 	Flash _flash;
 	BankConfiguration _bankConfig;
-	Spi _spi;
 	TimerInterruptHandler _timerInterruptHandler;
 	Timer _timer0;
 	Timer _timer1;
-	Dac _dac;
-	SdCard _sdCard;
 	Rmt _rmtLeds;
-	Rmt _rmtRemoteControl;
-	Leds _leds;
 	I2c _i2c;
-	IoExtender _ioExtender;
-	RfControl _rfControl;
 	DeviceInput _deviceInput;
+	Spi _spi;
 	Adafruit_SSD1306 _display;
-	CodeReceiver _codeReceiver;
 };
 } // namespace Hal
 
