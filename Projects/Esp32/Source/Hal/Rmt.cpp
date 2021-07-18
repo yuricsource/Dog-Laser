@@ -89,6 +89,7 @@ void IRAM_ATTR Rmt::doneOnChannel(rmt_channel_t channel, void * arg)
 
 void Rmt::Write(bool wait)
 {
+	rmt_tx_stop(static_cast<rmt_channel_t>(_rmtBuffer.Channel));
 	xSemaphoreTake(_rmtBuffer.Semaphore, portMAX_DELAY);
 	// Give a delay of 50 micro seconds to flush the last writing if there was
 	Dwt::DelayMicrosecond(50);

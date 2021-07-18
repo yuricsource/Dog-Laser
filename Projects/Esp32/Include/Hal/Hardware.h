@@ -100,12 +100,13 @@ private:
 	Timer _timer0;
 	Timer _timer1;
 	Rmt _rmt;
+	Rmt _rmt2;
 	I2c _i2c;
 	DeviceInput _deviceInput;
 	Spi _spi;
 	Adafruit_SSD1306 _display;
 	ServoMotor _motor1;
-	//ServoMotor _motor2;
+	ServoMotor _motor2;
 };
 } // namespace Hal
 

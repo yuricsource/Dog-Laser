@@ -24,12 +24,14 @@ Hardware::Hardware() :	_gpio(),
 						_timerInterruptHandler(),
 						_timer0(&_timerInterruptHandler, TimerSelect::Timer0),
 						_timer1(&_timerInterruptHandler, TimerSelect::Timer1),
-						_rmt(&_gpio, Gpio::GpioIndex::Gpio27, RmtChannel::RmtChannel1, 1, 1 ),
-						_i2c(&_gpio, Hal::I2cPort::I2c0, Gpio::GpioIndex::Gpio25, Gpio::GpioIndex::Gpio10),
+						_rmt(&_gpio, Gpio::GpioIndex::Gpio18, RmtChannel::RmtChannel0, Hal::BitsPerLed * Hal::MaxAddressableLeds, Hal::BitsPerLed),
+						_rmt2(&_gpio, Gpio::GpioIndex::Gpio5, RmtChannel::RmtChannel1, Hal::BitsPerLed * Hal::MaxAddressableLeds, Hal::BitsPerLed),
+						_i2c(&_gpio, Hal::I2cPort::I2c0, Gpio::GpioIndex::Gpio15, Gpio::GpioIndex::Gpio16),
 						_deviceInput(&_gpio, &_adc),
 						_spi(),
 						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
-						_motor1(&_gpio, &_timer0, &_rmt)
+						_motor1(&_gpio, Gpio::GpioIndex::Gpio18),
+						_motor2(&_gpio, Gpio::GpioIndex::Gpio5)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -88,8 +90,24 @@ Hardware::Hardware() :	_gpio(),
 	_display.setTextSize(2);
 	_display.setTextColor(WHITE);
 	_display.setCursor(0,0);
+	_display.print("Test\nline\nline 2");
 	_display.display();
-	_motor1.Refresh();
+	
+	_motor1.Init();
+	_motor2.Init();
+	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
+	_gpio.Set(Gpio::GpioIndex::Gpio17);
+	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
+	_gpio.Set(Gpio::GpioIndex::Gpio17);
+
+	for(;;)
+	{
+		_motor1.SetPositon(_rng.GetNumber()%100);
+		//_motor1.Refresh();
+		vTaskDelay(500);
+		_motor2.SetPositon(_rng.GetNumber()%100);
+		vTaskDelay(500);
+	}
 }
 
 uint32_t Hardware::GetSystemClockBase()
