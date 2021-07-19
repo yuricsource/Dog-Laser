@@ -26,6 +26,7 @@
 #include "I2c.h"
 #include "DeviceInput.h"
 #include "ServoMotor.h"
+#include "Laser.h"
 
 
 #include "Adafruit_GFX.h"
@@ -107,6 +108,7 @@ private:
 	Adafruit_SSD1306 _display;
 	ServoMotor _motor1;
 	ServoMotor _motor2;
+	Laser _laser;
 };
 } // namespace Hal
 

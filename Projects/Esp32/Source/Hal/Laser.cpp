@@ -1,23 +1,25 @@
 
 #include "HalCommon.h"
-#include "ServoMotor.h"
+#include "Laser.h"
 #include "Dwt.h"
 #include "string.h"
 
 namespace Hal
 {
 
-ServoMotor::ServoMotor(Gpio *IoPins, Gpio::GpioIndex pin, ledc_channel_t channel) : 
-		_gpio(IoPins), _pin(pin), _channel(channel)
+Laser::Laser(Gpio *IoPins, Gpio::GpioIndex pin, ledc_channel_t channel) : 
+	_gpio(IoPins), _pin(pin), _channel(channel)
 {
 }
 
-ServoMotor::~ServoMotor()
+
+Laser::~Laser()
 {
 }
 
-void ServoMotor::Init()
+void Laser::Init()
 {
+	static int i = 0;
 	ledc_timer.duty_resolution = LEDC_TIMER_13_BIT; // resolution of PWM duty
 	ledc_timer.freq_hz = 50;                      // frequency of PWM signal
 	ledc_timer.speed_mode = LEDC_LOW_SPEED_MODE;           // timer mode
@@ -31,8 +33,8 @@ void ServoMotor::Init()
     ledc_timer.timer_num = LEDC_TIMER_0;
     ledc_timer_config(&ledc_timer);
 
-	ledc_channel.channel    = _channel;
 	ledc_channel.duty       = 0;
+	ledc_channel.channel    = _channel;
 	ledc_channel.gpio_num   = static_cast<gpio_num_t>(_pin);
 	ledc_channel.speed_mode = LEDC_HIGH_SPEED_MODE;
 	ledc_channel.hpoint     = 0;
@@ -40,20 +42,15 @@ void ServoMotor::Init()
 	ledc_channel_config(&ledc_channel);
 }
 
-void ServoMotor::Refresh()
-{
 
-	
-}
-
-void ServoMotor::SetPositon(uint8_t percentage)
+void Laser::SetPower(uint8_t percentage)
 {
 	if (percentage > 100)
 		percentage = 100;
 	
-	uint16_t timePosition = (Time1ms * percentage) / 100;
+	uint16_t power = (MaxResolution * percentage) / 100;
 
-	ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, timePosition + Time1ms);
+	ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, power);
 	ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
 }
 

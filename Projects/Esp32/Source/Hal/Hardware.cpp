@@ -30,8 +30,9 @@ Hardware::Hardware() :	_gpio(),
 						_deviceInput(&_gpio, &_adc),
 						_spi(),
 						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
-						_motor1(&_gpio, Gpio::GpioIndex::Gpio18),
-						_motor2(&_gpio, Gpio::GpioIndex::Gpio5)
+						_motor1(&_gpio, Gpio::GpioIndex::Gpio18, LEDC_CHANNEL_0),
+						_motor2(&_gpio, Gpio::GpioIndex::Gpio5, LEDC_CHANNEL_1),
+						_laser(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_2)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -95,18 +96,17 @@ Hardware::Hardware() :	_gpio(),
 	
 	_motor1.Init();
 	_motor2.Init();
-	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
-	_gpio.Set(Gpio::GpioIndex::Gpio17);
-	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
-	_gpio.Set(Gpio::GpioIndex::Gpio17);
-
+	_laser.Init();
+	// _gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
+	// _gpio.Set(Gpio::GpioIndex::Gpio17);
+	// _gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
+	// _gpio.Set(Gpio::GpioIndex::Gpio17);
+	_laser.SetPower(10);
 	for(;;)
 	{
 		_motor1.SetPositon(_rng.GetNumber()%100);
-		//_motor1.Refresh();
-		vTaskDelay(500);
 		_motor2.SetPositon(_rng.GetNumber()%100);
-		vTaskDelay(500);
+		vTaskDelay(700);
 	}
 }
 
