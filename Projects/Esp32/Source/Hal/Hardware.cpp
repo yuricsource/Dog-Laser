@@ -32,7 +32,8 @@ Hardware::Hardware() :	_gpio(),
 						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
 						_motor1(&_gpio, Gpio::GpioIndex::Gpio18, LEDC_CHANNEL_0),
 						_motor2(&_gpio, Gpio::GpioIndex::Gpio5, LEDC_CHANNEL_1),
-						_laser(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_2)
+						_laser(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_2),
+						_wiiNunchuk(&_i2c, 0x52)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -71,6 +72,7 @@ Hardware::Hardware() :	_gpio(),
 	_i2c.ScanDevices();
 //	_ioExtender.Refresh(true);
 #endif
+	_i2c.ScanDevices();
 	// _spiffs.Mount();
 	// _sdCard.Mount();
 	// i2s_write;
@@ -94,20 +96,30 @@ Hardware::Hardware() :	_gpio(),
 	_display.print("Test\nline\nline 2");
 	_display.display();
 	
+	_wiiNunchuk.Init();
+
 	_motor1.Init();
 	_motor2.Init();
 	_laser.Init();
-	// _gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
-	// _gpio.Set(Gpio::GpioIndex::Gpio17);
-	// _gpio.ConfigOutput(Gpio::GpioIndex::Gpio17, Gpio::OutputType::PullUp);
-	// _gpio.Set(Gpio::GpioIndex::Gpio17);
-	_laser.SetPower(10);
+
+	// _laser.SetPower(10);
+	// for(;;)
+	// {
+	// 	_motor1.SetPositon(_rng.GetNumber()%100);
+	// 	_motor2.SetPositon(_rng.GetNumber()%100);
+	// 	vTaskDelay(700);
+	// }
+
+	
+	_laser.SetPower(30);
 	for(;;)
 	{
-		_motor1.SetPositon(_rng.GetNumber()%100);
-		_motor2.SetPositon(_rng.GetNumber()%100);
-		vTaskDelay(700);
+		_wiiNunchuk.Update();
+		_motor2.SetPositon(100 - _wiiNunchuk.GetJoystickX());
+		_motor1.SetPositon(_wiiNunchuk.GetJoystickY());
+		vTaskDelay(10);
 	}
+	
 }
 
 uint32_t Hardware::GetSystemClockBase()

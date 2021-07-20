@@ -119,7 +119,6 @@ bool I2c::Write(uint8_t slave_addr, uint8_t *data, uint8_t len)
     }
     printf("\n");
 #endif
-\
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     i2c_master_write_byte(cmd, (slave_addr << 1) | I2C_MASTER_WRITE, AckCheck);
@@ -171,12 +170,15 @@ bool I2c::Read(uint8_t slave_addr, uint8_t *data, uint32_t len)
     i2c_master_write_byte(cmd, (slave_addr << 1) | I2C_MASTER_READ, AckCheck);
     if (len > 1)
     {
-        i2c_master_read(cmd, data, len - 1, static_cast<i2c_ack_type_t>(AckValue));
+        i2c_master_read(cmd, data, len, static_cast<i2c_ack_type_t>(AckValue));
     }
-    i2c_master_read_byte(cmd, data + len - 1, static_cast<i2c_ack_type_t>(AckValue));
+    i2c_master_read_byte(cmd, data + len - 1, static_cast<i2c_ack_type_t>(AckCheck));
     i2c_master_stop(cmd);
     esp_err_t ret = i2c_master_cmd_begin(static_cast<i2c_port_t>(_i2cPort), cmd, 10 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
+
+    if (ret != ESP_OK)
+        printf("Error: %d\n", ret);
 
     return ret == ESP_OK;
 }

@@ -27,6 +27,7 @@
 #include "DeviceInput.h"
 #include "ServoMotor.h"
 #include "Laser.h"
+#include "WiiNunchuk.h"
 
 
 #include "Adafruit_GFX.h"
@@ -109,6 +110,7 @@ private:
 	ServoMotor _motor1;
 	ServoMotor _motor2;
 	Laser _laser;
+	WiiNunchuk _wiiNunchuk; 
 };
 } // namespace Hal
 
