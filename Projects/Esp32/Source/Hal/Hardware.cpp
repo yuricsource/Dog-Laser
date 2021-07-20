@@ -93,7 +93,7 @@ Hardware::Hardware() :	_gpio(),
 	_display.setTextSize(2);
 	_display.setTextColor(WHITE);
 	_display.setCursor(0,0);
-	_display.print("Test\nline\nline 2");
+	_display.print("  Dog WII");
 	_display.display();
 	
 	_wiiNunchuk.Init();
