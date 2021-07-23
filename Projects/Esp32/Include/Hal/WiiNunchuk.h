@@ -17,6 +17,7 @@ public:
 	void Update();
 	uint8_t GetJoystickY();
 	uint8_t GetJoystickX();
+	bool IsPresent();
 private:
 	I2c* _i2c;
 	uint8_t _address;

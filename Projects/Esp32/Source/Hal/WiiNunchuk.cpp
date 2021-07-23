@@ -38,6 +38,11 @@ bool WiiNunchuk::Init()
     return true;
 }
 
+bool WiiNunchuk::IsPresent()
+{
+    return _i2c->IsDeviceConnected(_address);
+}
+
 uint8_t WiiNunchuk::GetJoystickY()
 {
     uint16_t result = _nunChukData.Control.AxisY * 100 / 255;

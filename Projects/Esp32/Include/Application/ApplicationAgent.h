@@ -3,6 +3,7 @@
 #include "Hardware.h"
 #include "WifiService.h"
 #include "FirmwareUpdateService.h"
+#include "LaserControlService.h"
 
 namespace Applications
 {
@@ -23,15 +24,17 @@ public:
         return _applications;
     }
 
-    WifiService& GetWifi() {return *_wifiService;}
+    // WifiService& GetWifi() {return *_wifiService;}
     //HttpServer& GetHttpServer(){return *_httpServer;}
-    FirmwareUpdateService& GetFirmwareUpdateService(){ return *_firmwareUpdateService;}
+    // FirmwareUpdateService& GetFirmwareUpdateService(){ return *_firmwareUpdateService; }
+    LaserControlService& GetLaserControlService() { return *_laserControlService; }
 
 private:
     static ApplicationAgent *_applications;
-    WifiService *_wifiService;
+    // WifiService *_wifiService;
     //HttpServer *_httpServer;
-    FirmwareUpdateService * _firmwareUpdateService;
+    // FirmwareUpdateService * _firmwareUpdateService;
+    LaserControlService * _laserControlService;
 
 private:
     /// @brief	Hide Copy constructor.

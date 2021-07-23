@@ -24,8 +24,8 @@ public:
 	
 	enum class AnalogInputIndex : uint8_t
 	{
-		Color,
-		Brightness,
+		LaserPower,
+		LaserDelay,
 	};
 
 	uint16_t GetAnalogInput(AnalogInputIndex input, uint8_t averageSamples = 1);
@@ -38,8 +38,8 @@ private:
 	Adc* _adc;
 	Gpio::GpioIndex digitalInputIndex[MaxDigitalInputs] =
 	{
-		Gpio::GpioIndex::Gpio26,
-		Gpio::GpioIndex::Gpio18
+		Gpio::GpioIndex::Gpio36,
+		Gpio::GpioIndex::Gpio39
 	};
 	
 	Gpio::GpioIndex analogIndex[MaxAnalogInputs] =

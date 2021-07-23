@@ -58,6 +58,11 @@ public:
 	I2c &GetI2c() { return _i2c; }
 	DeviceInput& GetDeviceInput() { return _deviceInput; }
 	Adafruit_SSD1306& GetDisplay() { return _display; }
+	ServoMotor &GetMotorY() { return _motor1; }
+	ServoMotor &GetMotorX() { return _motor2; }
+	Laser &GetLaser() { return _laser; }
+	WiiNunchuk &GetController() { return _wiiNunchuk; }
+
 	uint32_t Milliseconds();
 	void TimerCallback();
 	ResetReason GetResetReason();

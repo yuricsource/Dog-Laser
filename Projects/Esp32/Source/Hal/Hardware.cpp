@@ -96,30 +96,10 @@ Hardware::Hardware() :	_gpio(),
 	_display.print("  Dog WII");
 	_display.display();
 	
-	_wiiNunchuk.Init();
-
 	_motor1.Init();
 	_motor2.Init();
 	_laser.Init();
-
-	// _laser.SetPower(10);
-	// for(;;)
-	// {
-	// 	_motor1.SetPositon(_rng.GetNumber()%100);
-	// 	_motor2.SetPositon(_rng.GetNumber()%100);
-	// 	vTaskDelay(700);
-	// }
-
-	
-	_laser.SetPower(30);
-	for(;;)
-	{
-		_wiiNunchuk.Update();
-		_motor2.SetPositon(100 - _wiiNunchuk.GetJoystickX());
-		_motor1.SetPositon(_wiiNunchuk.GetJoystickY());
-		vTaskDelay(10);
-	}
-	
+	_laser.SetPower(30);	
 }
 
 uint32_t Hardware::GetSystemClockBase()

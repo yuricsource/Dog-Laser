@@ -26,14 +26,13 @@ using Utilities::Logger;
 extern "C" void app_main(void)
 {
 	Hardware * hardware = Hardware::Instance();
-	//ConfigurationAgent::Instance();
+
 	ApplicationAgent::Instance();
 	ApplicationAgent::Instance()->Initialize();
-	//ConfigurationAgent::Instance()->UseDefaultConfiguration();
+	ApplicationAgent::Instance()->GetLaserControlService().Start();
 
 	for (;;)
 	{
-		vTaskDelay(100);
-		heap_caps_check_integrity(MALLOC_CAP_8BIT, true);
+		vTaskDelay(1000);
 	}
 }
