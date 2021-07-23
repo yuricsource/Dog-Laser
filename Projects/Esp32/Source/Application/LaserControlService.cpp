@@ -19,11 +19,12 @@ void LaserControlService::Run()
 {
     Logger::LogInfo(Logger::LogSource::LaserController, "Laser Controller Service Started");
        
-	bool runningWithController = false;
+	bool runningWithController = true;
     WiiNunchuk& wiiNunchuk = Hardware::Instance()->GetController();
     ServoMotor& motorY = Hardware::Instance()->GetMotorY();
     ServoMotor& motorX = Hardware::Instance()->GetMotorX();
     Rng& rng = Hardware::Instance()->GetRng();
+    Adafruit_SSD1306& display = Hardware::Instance()->GetDisplay();
 
 	for(;;)
 	{
@@ -33,10 +34,29 @@ void LaserControlService::Run()
 			{
 				wiiNunchuk.Init();
 				runningWithController = true;
+                display.clearDisplay();
+                display.setTextSize(2);
+                display.setCursor(0,0);
+                display.print("  Dog WII\n");
+                display.setTextSize(1);
+                display.print("\n\nController\nConnec");
+                display.display();
 			}
 		}
 		else
-			runningWithController = false;
+        {
+            if (runningWithController)
+            {
+                display.clearDisplay();
+                display.setTextSize(2);
+                display.setCursor(0,0);
+                display.print("  Dog WII\n");
+                display.setTextSize(1);
+                display.print("\n\nController\nDisconnected");
+                display.display();
+            }
+            runningWithController = false;
+        }
 
 		if (runningWithController)
 		{
