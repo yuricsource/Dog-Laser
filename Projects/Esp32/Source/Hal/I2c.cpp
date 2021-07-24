@@ -176,10 +176,10 @@ bool I2c::Read(uint8_t slave_addr, uint8_t *data, uint32_t len)
     i2c_master_stop(cmd);
     esp_err_t ret = i2c_master_cmd_begin(static_cast<i2c_port_t>(_i2cPort), cmd, 10 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
-
+ #ifdef DEBUG_I2C
     if (ret != ESP_OK)
         printf("Error: %d\n", ret);
-
+#endif
     return ret == ESP_OK;
 }
 

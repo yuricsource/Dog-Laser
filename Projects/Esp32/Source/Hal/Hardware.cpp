@@ -70,23 +70,9 @@ Hardware::Hardware() :	_gpio(),
 
 #ifdef HARDWARE_TESTER
 	_i2c.ScanDevices();
-//	_ioExtender.Refresh(true);
 #endif
-	_i2c.ScanDevices();
 	// _spiffs.Mount();
-	// _sdCard.Mount();
-	// i2s_write;
-	_timer0.Initlialize();
-	//_timer0.AddCallback(this);
-	_timer0.Start();
-
-	_timer0.SetTimer(16000);
-
 	
-	_timer1.Initlialize();
-	_timer1.Start();
-	_timer1.SetTimer(16000);
-
 	// initializing display
 	_display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false);
 	_display.clearDisplay();

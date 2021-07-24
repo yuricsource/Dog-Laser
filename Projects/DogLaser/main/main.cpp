@@ -27,9 +27,10 @@ extern "C" void app_main(void)
 {
 	Hardware * hardware = Hardware::Instance();
 
-	ApplicationAgent::Instance();
+	// Start Applications
 	ApplicationAgent::Instance()->Initialize();
 	ApplicationAgent::Instance()->GetLaserControlService().Start();
+	ApplicationAgent::Instance()->GetMenuService()->Start();
 
 	for (;;)
 	{

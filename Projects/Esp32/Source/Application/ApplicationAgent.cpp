@@ -19,9 +19,8 @@ ApplicationAgent::ApplicationAgent()
 
 void ApplicationAgent::Initialize()
 {
-    // _wifiService = new WifiService();
-    // _firmwareUpdateService = new FirmwareUpdateService();
     _laserControlService = new LaserControlService();
+    _menuService = new MenuService();
 }
 
 } // namespace Applications

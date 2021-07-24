@@ -4,6 +4,7 @@
 #include "WifiService.h"
 #include "FirmwareUpdateService.h"
 #include "LaserControlService.h"
+#include "MenuService.h"
 
 namespace Applications
 {
@@ -24,18 +25,13 @@ public:
         return _applications;
     }
 
-    // WifiService& GetWifi() {return *_wifiService;}
-    //HttpServer& GetHttpServer(){return *_httpServer;}
-    // FirmwareUpdateService& GetFirmwareUpdateService(){ return *_firmwareUpdateService; }
     LaserControlService& GetLaserControlService() { return *_laserControlService; }
+    MenuService* GetMenuService() { return _menuService; }
 
 private:
     static ApplicationAgent *_applications;
-    // WifiService *_wifiService;
-    //HttpServer *_httpServer;
-    // FirmwareUpdateService * _firmwareUpdateService;
     LaserControlService * _laserControlService;
-
+    MenuService * _menuService;
 private:
     /// @brief	Hide Copy constructor.
     ApplicationAgent(const ApplicationAgent &) = delete;

@@ -27,6 +27,7 @@ public:
 		AudioPlayer,
 		RemoteReceiver,
 		LaserController,
+		Menu,
 		Unknown = 255
 	};
 
