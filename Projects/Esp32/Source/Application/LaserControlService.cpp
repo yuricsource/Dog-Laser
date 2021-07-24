@@ -2,15 +2,18 @@
 #include "ConfigurationAgent.h"
 #include "WebSocket.h"
 #include "Hardware.h"
+#include "ApplicationAgent.h"
 
 namespace Applications
 {
 using Hal::Hardware;
 using Hal::WiiNunchuk;
 using Hal::ServoMotor;
+using Hal::DeviceInput;
+using Hal::Laser;
 using Hal::Rng;
 
-LaserControlService::LaserControlService() : cpp_freertos::Thread("GWSVC", configGATEWAYSVC_STACK_DEPTH, 3)
+LaserControlService::LaserControlService() : cpp_freertos::Thread("LSRVC", configLASERSVC_STACK_DEPTH, 3)
 {
 
 }
@@ -23,9 +26,12 @@ void LaserControlService::Run()
     WiiNunchuk& wiiNunchuk = Hardware::Instance()->GetController();
     ServoMotor& motorY = Hardware::Instance()->GetMotorY();
     ServoMotor& motorX = Hardware::Instance()->GetMotorX();
+    Laser& laser = Hardware::Instance()->GetLaser();
     Rng& rng = Hardware::Instance()->GetRng();
-    Adafruit_SSD1306& display = Hardware::Instance()->GetDisplay();
-
+	ApplicationAgent* appAgent = ApplicationAgent::Instance();
+	DeviceInput& deviceInput = Hardware::Instance()->GetDeviceInput();
+	uint16_t laserDelay = 0;
+	uint16_t laserPower = 0;
 	for(;;)
 	{
 		if (wiiNunchuk.IsPresent())
@@ -34,26 +40,16 @@ void LaserControlService::Run()
 			{
 				wiiNunchuk.Init();
 				runningWithController = true;
-                display.clearDisplay();
-                display.setTextSize(2);
-                display.setCursor(0,0);
-                display.print("  Dog WII\n");
-                display.setTextSize(1);
-                display.print("\n\nController\nConnec");
-                display.display();
+				appAgent->GetMenuService()->UpdateDisplay("Controller\nConnected");
+				Logger::LogInfo(Logger::LogSource::LaserController, "Controller Connected.");
 			}
 		}
 		else
         {
             if (runningWithController)
             {
-                display.clearDisplay();
-                display.setTextSize(2);
-                display.setCursor(0,0);
-                display.print("  Dog WII\n");
-                display.setTextSize(1);
-                display.print("\n\nController\nDisconnected");
-                display.display();
+				appAgent->GetMenuService()->UpdateDisplay("Controller\nDisconnected");
+				Logger::LogInfo(Logger::LogSource::LaserController, "Controller Disconnected.");
             }
             runningWithController = false;
         }
@@ -68,10 +64,19 @@ void LaserControlService::Run()
 		}
 		else
 		{
+			laserDelay = deviceInput.GetAnalogInput(DeviceInput::AnalogInputIndex::LaserDelay);
 			motorX.SetPositon(rng.GetNumber()%100);
 			motorY.SetPositon(rng.GetNumber()%100);
-			vTaskDelay(200 + rng.GetNumber()%600);
+
+			if (laserDelay == 0)
+				laserDelay = 300;
+
+			vTaskDelay(laserDelay + rng.GetNumber()%(laserDelay / 2));
 		}
+		laserPower = deviceInput.GetAnalogInput(DeviceInput::AnalogInputIndex::LaserPower);
+		if (laserPower > 0)
+			laserPower = (laserPower * 100) / 4096;
+		laser.SetPower(laserPower);
 	}
 }
 

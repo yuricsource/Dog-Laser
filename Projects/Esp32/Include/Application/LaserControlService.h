@@ -22,7 +22,7 @@ public:
     LaserControlService();
 
 private:
-
+    
 protected:
     void Run() override;
 
