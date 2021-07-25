@@ -2,6 +2,7 @@
 
 #include "Hardware.h"
 #include "BoardStatus.h"
+#include "InputStatusList.h"
 
 namespace Status
 {
@@ -22,9 +23,13 @@ public:
         return _statusAgent;
     }
 
+    BoardStatus& GetBoardStatus() { return *_boardStatus; }
+    InputStatusList& GetInputStatusList() { return *_inputStatusList; }
+    
 private:
     static StatusAgent *_statusAgent;
     BoardStatus * _boardStatus = nullptr;
+    InputStatusList * _inputStatusList = nullptr;
     
 private:
     /// @brief	Hide Copy constructor.

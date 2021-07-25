@@ -16,8 +16,6 @@
 #include "ApplicationAgent.h"
 #include "ConfigurationAgent.h"
 #include "StatusAgent.h"
-#include "InputStatus.h"
-#include "InputStatusList.h"
 
 using Applications::ApplicationAgent;
 using Status::StatusAgent;
@@ -36,15 +34,11 @@ extern "C" void app_main(void)
 	ApplicationAgent::Instance()->Initialize();
 	ApplicationAgent::Instance()->GetLaserControlService().Start();
 	ApplicationAgent::Instance()->GetMenuService()->Start();
+	ApplicationAgent::Instance()->GetInputScannerService()->Start();
 
-	// Status::InputStatus* input = new Status::InputStatus(Hal::InputType::Analog);
-
-	// printf("Input: %d\n\n", input->GetAnalogLevel());
-	Status::InputStatusList inputList;
-
-	for(uint8_t i = 1; i <= inputList.Count(); i++)
+	for(uint8_t i = 1; i <= StatusAgent::Instance()->GetInputStatusList().Count(); i++)
 	{
-		printf("input %d: type %d\n", i, (uint8_t)inputList[i].GetType());
+		printf("input %d: type %d\n", i, (uint8_t)StatusAgent::Instance()->GetInputStatusList()[i].GetType());
 	}
 
 	for (;;)

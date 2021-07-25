@@ -5,6 +5,7 @@
 #include "FirmwareUpdateService.h"
 #include "LaserControlService.h"
 #include "MenuService.h"
+#include "InputScannerService.h"
 
 namespace Applications
 {
@@ -27,11 +28,14 @@ public:
 
     LaserControlService& GetLaserControlService() { return *_laserControlService; }
     MenuService* GetMenuService() { return _menuService; }
+    InputScannerService* GetInputScannerService() { return _inputScanner; }
 
 private:
     static ApplicationAgent *_applications;
     LaserControlService * _laserControlService;
     MenuService * _menuService;
+    InputScannerService * _inputScanner;
+
 private:
     /// @brief	Hide Copy constructor.
     ApplicationAgent(const ApplicationAgent &) = delete;

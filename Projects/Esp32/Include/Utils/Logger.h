@@ -28,6 +28,7 @@ public:
 		RemoteReceiver,
 		LaserController,
 		Menu,
+		InputScanner,
 		Unknown = 255
 	};
 

@@ -21,6 +21,7 @@ void ApplicationAgent::Initialize()
 {
     _laserControlService = new LaserControlService();
     _menuService = new MenuService();
+    _inputScanner = new InputScannerService();
 }
 
 } // namespace Applications

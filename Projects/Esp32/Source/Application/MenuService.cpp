@@ -6,7 +6,7 @@
 namespace Applications
 {
 
-MenuService::MenuService() : cpp_freertos::Thread("MENUVC", configMENUSVC_STACK_DEPTH, 3)
+MenuService::MenuService() : cpp_freertos::Thread("MENUSVC", configMENUSVC_STACK_DEPTH, 3)
 {
     _display = &Hardware::Instance()->GetDisplay();
 	_stateMachine = MenuStateMachine::Idle;

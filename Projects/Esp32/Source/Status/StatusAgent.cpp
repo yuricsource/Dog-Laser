@@ -20,6 +20,7 @@ StatusAgent::StatusAgent()
 void StatusAgent::Initialize()
 {
     _boardStatus = new BoardStatus();
+    _inputStatusList = new InputStatusList();
 }
 
 } // namespace Applications
