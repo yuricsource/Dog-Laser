@@ -273,6 +273,13 @@ enum class Bank : uint8_t
 	Unknown = 255
 };
 
+enum class InputType : uint8_t
+{
+	None,
+	Digital,
+	Analog
+};
+
 union Led
 {
 	struct

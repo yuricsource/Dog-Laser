@@ -27,7 +27,10 @@
                 "${workspaceFolder}/../Esp32/Libraries/**",
                 "${workspaceFolder}/../Esp32/Libraries/freertos-addons/Source/include",
                 "${env:IDF_TOOLS}/**",
-                "${env:IDF_PATH}/components/**"
+                "${env:IDF_PATH}/components/**",
+                "F:/YuriCode/Dog-Laser/Projects/Esp32/Include/Protocol",
+                "F:/YuriCode/Dog-Laser/Projects/Esp32/Include/Common",
+                "F:/YuriCode/Dog-Laser/Projects/Esp32/Include/Status"
             ],
             "defines": [],
             "cStandard": "c11",
