@@ -4,7 +4,7 @@ namespace Status
 {
 
 
-InputStatus::InputStatus(const char* name, Hal::InputType inputType) : InputStatusBase(name)
+InputStatus::InputStatus(Hal::InputType inputType)
 {
     _inputData.Type = inputType;
 }

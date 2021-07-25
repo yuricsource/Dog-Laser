@@ -10,12 +10,9 @@ namespace Status
 class InputStatusBase
 {
 public:
-    InputStatusBase(const char* name)
+    InputStatusBase()
     {
-        uint32_t len = strlen(name);
-        DebugAssertMessage(len < _name.size(), "Name Size too long, size:%d, supported:%d", len, _name.size());
-        memset(_name.data(), 0, _name.size());
-        memcpy(_name.data(), name, len);
+
     }
     ~InputStatusBase()
     {
@@ -35,11 +32,6 @@ public:
        DebugAssertMessage(GetType() == Hal::InputType::Analog, "Input is not configured as Analog.");
         return false;
     }
-
-    const char* GetName() const
-    {
-        return _name.data();
-    }
     
     /// @brief Input Type
     virtual Hal::InputType GetType() = 0;
@@ -48,8 +40,6 @@ private:
     virtual uint16_t DoGetAnalogLevel() = 0;
     /// @brief Get Digital Value
     virtual bool DoGetDigitalLevel() = 0;
-    static const uint8_t NameSize = 12;
-    std::array<char, NameSize> _name;
 private:
     /// @brief	Hide Copy constructor.
     InputStatusBase(const InputStatusBase &) = delete;

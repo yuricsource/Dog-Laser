@@ -36,9 +36,9 @@ extern "C" void app_main(void)
 	ApplicationAgent::Instance()->GetLaserControlService().Start();
 	ApplicationAgent::Instance()->GetMenuService()->Start();
 
-	Status::InputStatus* input = new Status::InputStatus("Button 1", Hal::InputType::Analog);
+	Status::InputStatus* input = new Status::InputStatus(Hal::InputType::Analog);
 
-	printf("%s: %d\n\n",input->GetName(), input->GetAnalogLevel());
+	printf("Input: %d\n\n", input->GetAnalogLevel());
 
 	for (;;)
 	{

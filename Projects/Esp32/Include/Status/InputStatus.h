@@ -10,7 +10,7 @@ using Hal::InputType;
 class InputStatus : public InputStatusBase
 {
 public:
-    InputStatus(const char* name, Hal::InputType inputType);
+    InputStatus(Hal::InputType inputType);
 
     ~InputStatus();
 
