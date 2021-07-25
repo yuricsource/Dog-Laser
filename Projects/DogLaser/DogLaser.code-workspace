@@ -80,7 +80,9 @@
 			"thread": "cpp",
 			"typeinfo": "cpp",
 			"esp_attr.h": "c",
-			"xiosbase": "cpp"
+			"xiosbase": "cpp",
+			"xstring": "cpp",
+			"xutility": "cpp"
 		}
 	}
 }

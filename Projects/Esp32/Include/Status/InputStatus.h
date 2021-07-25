@@ -10,7 +10,14 @@ using Hal::InputType;
 class InputStatus : public InputStatusBase
 {
 public:
-    InputStatus(Hal::InputType inputType);
+    InputStatus(InputType inputType);
+    InputStatus();
+
+    /// @brief Get Type
+    InputType GetType() override;
+
+    /// @brief Get Type
+    void SetType(InputType inputType);
 
     ~InputStatus();
 
@@ -20,9 +27,6 @@ private:
     
     /// @brief Do Get Analog Level
     uint16_t DoGetAnalogLevel() override;
-    
-    /// @brief Get Type
-    InputType GetType() override;
 
     struct InputData 
     {

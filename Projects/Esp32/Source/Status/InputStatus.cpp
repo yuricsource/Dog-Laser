@@ -4,13 +4,22 @@ namespace Status
 {
 
 
-InputStatus::InputStatus(Hal::InputType inputType)
+InputStatus::InputStatus(InputType inputType)
 {
     _inputData.Type = inputType;
 }
 
+InputStatus::InputStatus()
+{
+}
+
 InputStatus::~InputStatus()
 {
+}
+
+void InputStatus::SetType(InputType inputType)
+{
+    _inputData.Type = inputType;
 }
 
 bool InputStatus::DoGetDigitalLevel()

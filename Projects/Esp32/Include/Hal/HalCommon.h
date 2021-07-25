@@ -14,6 +14,9 @@ namespace Hal
 
 using std::array;
 
+static constexpr uint8_t MaxDigitalInputs = 2;
+static constexpr uint8_t MaxAnalogInputs = 2;
+
 enum class RmtProtocolSupported : uint8_t
 {
 	WS2812B,

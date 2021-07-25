@@ -13,9 +13,6 @@ class DeviceInput
 {
 
 public:
-	static constexpr uint8_t MaxDigitalInputs = 2;
-	static constexpr uint8_t MaxAnalogInputs = 2;
-
 	enum class DigitalInputIndex : uint8_t
 	{
 		UserButtonEnter,

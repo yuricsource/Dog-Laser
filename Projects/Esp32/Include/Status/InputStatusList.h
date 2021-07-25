@@ -2,18 +2,45 @@
 
 #include "HalCommon.h"
 #include "InputStatus.h"
+#include "DebugAssert.h"
 
 namespace Status
 {
+using std::array;
+using Hal::MaxDigitalInputs;
+using Hal::MaxAnalogInputs;
+using Hal::InputType;
 
 class InputStatusList
 {
 public:
     InputStatusList();
     ~InputStatusList();
+    static constexpr uint16_t Count() { return InputCount; }	
+    // @brief	Check if Id is in range.
+	static constexpr bool IsInRange(int logicalId)
+	{
+		return logicalId >= 1 && logicalId <= InputCount;
+	}
 
+	/// @brief	Array indexer operator.
+	/// @param	logicalId	Input Logical Identifier, 1 based.
+	/// @return	The InputStatus instance at logicalId index.
+	inline InputStatus& operator[](int logicalId)
+	{
+		if (!IsInRange(logicalId))
+		{
+			assert(logicalId >= 1 && logicalId <= InputCount);
+            DebugAssertMessage(logicalId >= 1 && logicalId <= InputCount,
+            "Input-Id#%d|Out of Range|\n", logicalId);
+		}
+		return _inputList[logicalId - 1];
+	}
 private:
-
+    static const uint16_t InputCount = MaxAnalogInputs + MaxDigitalInputs;
+    array <InputStatus, InputCount> _inputList;
+    InputType StaticInputConfig [InputCount] = {InputType::Digital, InputType::Digital,
+                                                             InputType::Analog,  InputType::Analog};
 private:
     /// @brief	Hide Copy constructor.
     InputStatusList(const InputStatusList &) = delete;
