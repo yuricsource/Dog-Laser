@@ -28,6 +28,12 @@ private:
     /// @brief Do Get Analog Level
     uint16_t DoGetAnalogLevel() override;
 
+    /// @brief Get Digital Value
+    void DoSetDigitalLevel(bool value) override;
+    
+    /// @brief Set Analog Value
+    void DoSetAnalogLevel(uint16_t value) override;
+
     struct InputData 
     {
         InputType Type;

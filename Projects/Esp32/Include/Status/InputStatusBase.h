@@ -26,20 +26,43 @@ public:
         return DoGetDigitalLevel();
     }
 
-    /// @brief Get Analog Value
-    virtual bool GetAnalogLevel()
+    /// @brief Set Digital Value
+    virtual void SetDigitalLevel(bool value)
     {
-       DebugAssertMessage(GetType() == Hal::InputType::Analog, "Input is not configured as Analog.");
-        return false;
+        DebugAssertMessage(GetType() == Hal::InputType::Digital, "Input is not configured as Digital.");
+        return DoSetDigitalLevel(value);
+    }
+
+    /// @brief Get Analog Value
+    virtual uint32_t GetAnalogLevel()
+    {
+        DebugAssertMessage(GetType() == Hal::InputType::Analog, "Input is not configured as Analog.");
+        return DoGetAnalogLevel();
+    }
+
+    /// @brief Set Analog Value
+    virtual void SetAnalogLevel(uint16_t value)
+    {
+        DebugAssertMessage(GetType() == Hal::InputType::Analog, "Input is not configured as Analog.");
+        return DoSetAnalogLevel(value);
     }
     
     /// @brief Input Type
     virtual Hal::InputType GetType() = 0;
+
 private:
     /// @brief Get Analog Value
     virtual uint16_t DoGetAnalogLevel() = 0;
+
     /// @brief Get Digital Value
     virtual bool DoGetDigitalLevel() = 0;
+
+    /// @brief Get Digital Value
+    virtual void DoSetDigitalLevel(bool value) = 0;
+    
+    /// @brief Set Analog Value
+    virtual void DoSetAnalogLevel(uint16_t value) = 0;
+
 private:
     /// @brief	Hide Copy constructor.
     InputStatusBase(const InputStatusBase &) = delete;

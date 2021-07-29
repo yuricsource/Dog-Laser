@@ -32,6 +32,16 @@ uint16_t InputStatus::DoGetAnalogLevel()
     return _inputData.Data.Analog.LiveLevel;
 }
 
+void InputStatus::DoSetDigitalLevel(bool value)
+{
+    _inputData.Data.Digital.State = value;
+}
+
+void InputStatus::DoSetAnalogLevel(uint16_t value)
+{
+    _inputData.Data.Analog.LiveLevel = value;
+}
+
 InputType InputStatus::GetType()
 {
     return _inputData.Type;
