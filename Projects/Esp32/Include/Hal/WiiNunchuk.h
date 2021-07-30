@@ -22,6 +22,7 @@ private:
 	I2c* _i2c;
 	uint8_t _address;
 	static const uint8_t RawDataSize = 6;
+	bool _controllerInitialized = false;
 	union NunChukData
 	{
 		struct

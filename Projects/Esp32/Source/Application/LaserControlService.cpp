@@ -3,6 +3,7 @@
 #include "WebSocket.h"
 #include "Hardware.h"
 #include "ApplicationAgent.h"
+#include "StatusAgent.h"
 
 namespace Applications
 {
@@ -64,7 +65,9 @@ void LaserControlService::Run()
 		}
 		else
 		{
-			laserDelay = deviceInput.GetAnalogInput(DeviceInput::AnalogInputIndex::LaserDelay);
+			// laserDelay = deviceInput.GetAnalogInput(Hal::AnalogInputIndex::LaserDelay);
+			laserDelay = Status::StatusAgent::Instance()->GetInputStatusList().
+							GetInput(Configuration::InputIndex::PotLaserDelay).GetAnalogLevel();
 			motorX.SetPositon(rng.GetNumber()%100);
 			motorY.SetPositon(rng.GetNumber()%100);
 
@@ -73,7 +76,9 @@ void LaserControlService::Run()
 
 			vTaskDelay(laserDelay + rng.GetNumber()%(laserDelay / 2));
 		}
-		laserPower = deviceInput.GetAnalogInput(DeviceInput::AnalogInputIndex::LaserPower);
+		// laserPower = deviceInput.GetAnalogInput(Hal::AnalogInputIndex::LaserPower);
+		laserPower = Status::StatusAgent::Instance()->GetInputStatusList().
+						GetInput(Configuration::InputIndex::PotLaserPower).GetAnalogLevel();
 		if (laserPower > 0)
 			laserPower = (laserPower * 100) / 4096;
 		laser.SetPower(laserPower);

@@ -19,6 +19,10 @@ WiiNunchuk::WiiNunchuk(I2c* i2c, uint8_t address) :
 bool WiiNunchuk::Init()
 {
     uint8_t data1[2] = {0xF0, 0x55};
+    
+    if (_controllerInitialized)
+        return true;
+
     if (!_i2c->Write(_address, data1, 2))
     {
 #ifdef DEBUG_CONTROLLER
@@ -44,13 +48,17 @@ bool WiiNunchuk::Init()
 #endif
         return false;
     }
-
+    _controllerInitialized = true;
     return true;
 }
 
 bool WiiNunchuk::IsPresent()
 {
-    return _i2c->IsDeviceConnected(_address);
+    bool result = _i2c->IsDeviceConnected(_address);
+    if (!result)
+        _controllerInitialized = false;
+    
+    return result;
 }
 
 uint8_t WiiNunchuk::GetJoystickY()
@@ -67,11 +75,18 @@ uint8_t WiiNunchuk::GetJoystickX()
 
 void WiiNunchuk::Update()
 {
+    if (!_controllerInitialized)
+    {
+        if (!Init())
+            return;
+    }
+
     if (!_i2c->Read(_address, _nunChukData.Raw, 6))
     {
 #ifdef DEBUG_CONTROLLER
         printf("WiiNunchuk Failed to read data.\n");
 #endif
+        _controllerInitialized = false;
         return;
     }
 #ifdef DEBUG_CONTROLLER
@@ -88,6 +103,7 @@ void WiiNunchuk::Update()
 #ifdef DEBUG_CONTROLLER
         printf("WiiNunchuk Failed to write data3.\n");
 #endif
+        _controllerInitialized = false;
         return;
     }
 }

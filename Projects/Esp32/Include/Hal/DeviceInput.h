@@ -13,18 +13,6 @@ class DeviceInput
 {
 
 public:
-	enum class DigitalInputIndex : uint8_t
-	{
-		UserButtonEnter,
-		UserButtonReturn,
-	};
-	
-	enum class AnalogInputIndex : uint8_t
-	{
-		LaserPower,
-		LaserDelay,
-	};
-
 	uint16_t GetAnalogInput(AnalogInputIndex input, uint8_t averageSamples = 1);
 	DeviceInput(Gpio* IoPins, Adc* adc);
 	~DeviceInput();

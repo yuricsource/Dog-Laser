@@ -34,7 +34,7 @@ public:
     }
 
     /// @brief Get Analog Value
-    virtual uint32_t GetAnalogLevel()
+    virtual uint16_t GetAnalogLevel()
     {
         DebugAssertMessage(GetType() == Hal::InputType::Analog, "Input is not configured as Analog.");
         return DoGetAnalogLevel();

@@ -32,7 +32,7 @@ public:
     inline InputStatus& GetInput(InputIndex index)
     {
         uint8_t inputIndex = static_cast<uint8_t>(index);
-        return _inputList[inputIndex - 1];
+        return _inputList[inputIndex];
     }
 
 	/// @brief	Array indexer operator.
@@ -48,7 +48,7 @@ public:
 		}
 		return _inputList[logicalId - 1];
 	}
-    
+
 private:
     static const uint16_t InputCount = MaxAnalogInputs + MaxDigitalInputs;
     array <InputStatus, InputCount> _inputList;
