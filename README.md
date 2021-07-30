@@ -9,6 +9,6 @@ So I created one that plays with her. For her safety, this laser is power adjust
 ![](Documentation/Demo%202.gif)
 ![](Documentation/Demo%201.gif)
 
-This project was 3D/hardware/firmware designed 100% by me. It uses embeded C and C++ with FreeRTOS on ESP32 microcontroller.
+This project was 3D/hardware/firmware designed 100% by me. The firmware implementation is done with embeded C++ and FreeRTOS on the ESP32 microcontroller.
 
 ![](Documentation/Laser%20box.png)
