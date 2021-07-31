@@ -22,6 +22,22 @@ public:
     LaserControlService();
 
 private:
+
+    uint8_t _remoteX = 0;
+    uint8_t _remoteY = 0;
+
+    enum class LaserRoundEffectStateMachine : uint8_t
+    {
+        None,
+        RasingXDroppingY,
+        RasingXRasingY,
+        DroppingXDroppingY,
+        DroppingXRasingY,
+    };
+
+    LaserRoundEffectStateMachine _roundEffectState = LaserRoundEffectStateMachine::None;
+    void randomPosition();
+    void roundEffect();
     
 protected:
     void Run() override;

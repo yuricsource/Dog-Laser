@@ -28,10 +28,8 @@ void LaserControlService::Run()
     ServoMotor& motorY = Hardware::Instance()->GetMotorY();
     ServoMotor& motorX = Hardware::Instance()->GetMotorX();
     Laser& laser = Hardware::Instance()->GetLaser();
-    Rng& rng = Hardware::Instance()->GetRng();
-	ApplicationAgent* appAgent = ApplicationAgent::Instance();
+   	ApplicationAgent* appAgent = ApplicationAgent::Instance();
 	DeviceInput& deviceInput = Hardware::Instance()->GetDeviceInput();
-	uint16_t laserDelay = 0;
 	uint16_t laserPower = 0;
 	for(;;)
 	{
@@ -65,24 +63,74 @@ void LaserControlService::Run()
 		}
 		else
 		{
-			// laserDelay = deviceInput.GetAnalogInput(Hal::AnalogInputIndex::LaserDelay);
-			laserDelay = Status::StatusAgent::Instance()->GetInputStatusList().
-							GetInput(Configuration::InputIndex::PotLaserDelay).GetAnalogLevel();
-			motorX.SetPositon(rng.GetNumber()%100);
-			motorY.SetPositon(rng.GetNumber()%100);
-
-			if (laserDelay == 0)
-				laserDelay = 300;
-
-			vTaskDelay(laserDelay + rng.GetNumber()%(laserDelay / 2));
+			roundEffect();
 		}
-		// laserPower = deviceInput.GetAnalogInput(Hal::AnalogInputIndex::LaserPower);
 		laserPower = Status::StatusAgent::Instance()->GetInputStatusList().
 						GetInput(Configuration::InputIndex::PotLaserPower).GetAnalogLevel();
 		if (laserPower > 0)
 			laserPower = (laserPower * 100) / 4096;
 		laser.SetPower(laserPower);
 	}
+}
+
+void LaserControlService::randomPosition()
+{
+	ServoMotor& motorY = Hardware::Instance()->GetMotorY();
+    ServoMotor& motorX = Hardware::Instance()->GetMotorX();
+	uint16_t laserDelay = Status::StatusAgent::Instance()->GetInputStatusList().
+					GetInput(Configuration::InputIndex::PotLaserDelay).GetAnalogLevel();
+    Rng& rng = Hardware::Instance()->GetRng();
+	motorX.SetPositon(rng.GetNumber()%100);
+	motorY.SetPositon(rng.GetNumber()%100);
+
+	if (laserDelay < 300)
+		laserDelay = 300;
+
+	vTaskDelay(laserDelay + rng.GetNumber()%(laserDelay / 2));
+}
+
+void LaserControlService::roundEffect()
+{
+ServoMotor& motorY = Hardware::Instance()->GetMotorY();
+    ServoMotor& motorX = Hardware::Instance()->GetMotorX();
+	switch(_roundEffectState)
+	{
+		case LaserRoundEffectStateMachine::RasingXDroppingY:
+			_remoteX++;
+			_remoteY--;
+			if (_remoteX == 100)
+				_roundEffectState = LaserRoundEffectStateMachine::DroppingXDroppingY;
+			break;
+		case LaserRoundEffectStateMachine::DroppingXDroppingY:
+			_remoteX--;
+			_remoteY--;
+			if (_remoteX == 50)
+				_roundEffectState = LaserRoundEffectStateMachine::DroppingXRasingY;
+			break;
+		case LaserRoundEffectStateMachine::DroppingXRasingY:
+			_remoteX--;
+			_remoteY++;
+			if (_remoteX == 0)
+				_roundEffectState = LaserRoundEffectStateMachine::RasingXRasingY;
+			break;
+		case LaserRoundEffectStateMachine::RasingXRasingY:
+			_remoteX++;
+			_remoteY++;
+			if (_remoteX == 50)
+				_roundEffectState = LaserRoundEffectStateMachine::None;
+			break;
+		
+		default:
+			_roundEffectState = LaserRoundEffectStateMachine::RasingXDroppingY;
+			_remoteX = 50;
+			_remoteY = 100;
+	}
+	motorX.SetPositon(_remoteX);
+	motorY.SetPositon(_remoteY);
+	uint16_t laserDelay = Status::StatusAgent::Instance()->GetInputStatusList().
+				GetInput(Configuration::InputIndex::PotLaserDelay).GetAnalogLevel();
+
+	vTaskDelay(10 + (laserDelay / 100));
 }
 
 } // namespace Applications
