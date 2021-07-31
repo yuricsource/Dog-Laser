@@ -22,6 +22,32 @@ public:
     ~InputStatus();
 
 private:
+    static const uint8_t MaxHitCount = 5;
+    struct InputData 
+    {
+        InputType Type;
+        uint8_t Reserved_0;
+        union
+        {
+            struct
+            {
+                bool State          : 1;
+                bool MaskedState    : 1;
+                uint8_t HitCount    : 6;
+                uint16_t Reserved_0 : 16;
+            } Digital;
+            struct
+            {
+                uint16_t LiveLevel  : 16;
+                uint16_t MaskedLevel: 16;
+            } Analog;
+        } Data;
+    };
+    static_assert(sizeof(InputData) == 6, "InputData has wrong size, compiler error.");
+
+    InputData _inputData = {};
+
+
     /// @brief Do Get Digital Level
     bool DoGetDigitalLevel() override;
     
@@ -34,26 +60,9 @@ private:
     /// @brief Set Analog Value
     void DoSetAnalogLevel(uint16_t value) override;
 
-    struct InputData 
-    {
-        InputType Type;
-        union
-        {
-            struct
-            {
-                bool State;
-                bool MaskedState;
-            } Digital;
-            struct
-            {
-                uint16_t LiveLevel;
-                uint16_t MaskedLevel;
-            } Analog;
-        } Data;
-    };
-    static_assert(sizeof(InputData) == 6, "InputData has wrong size, compiler error.");
+    /// @brief Do Get Digital Debounce Level
+    bool DoGetDigitalLevelDebounce() override;
 
-    InputData _inputData = {};
 private:
     /// @brief	Hide Copy constructor.
     InputStatus(const InputStatus &) = delete;

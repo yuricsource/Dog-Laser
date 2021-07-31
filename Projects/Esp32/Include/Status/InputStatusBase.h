@@ -26,6 +26,13 @@ public:
         return DoGetDigitalLevel();
     }
 
+    /// @brief Get Digital Value Debounce
+    virtual bool GetDigitalLevelDebounce()
+    {
+        DebugAssertMessage(GetType() == Hal::InputType::Digital, "Input is not configured as Digital.");
+        return DoGetDigitalLevelDebounce();
+    }
+
     /// @brief Set Digital Value
     virtual void SetDigitalLevel(bool value)
     {
@@ -58,6 +65,9 @@ private:
     virtual bool DoGetDigitalLevel() = 0;
 
     /// @brief Get Digital Value
+    virtual bool DoGetDigitalLevelDebounce() = 0;
+
+    /// @brief Set Digital Value
     virtual void DoSetDigitalLevel(bool value) = 0;
     
     /// @brief Set Analog Value
