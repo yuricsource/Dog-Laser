@@ -1,20 +1,19 @@
 #include "LaserControlService.h"
-#include "ConfigurationAgent.h"
-#include "WebSocket.h"
-#include "Hardware.h"
 #include "ApplicationAgent.h"
 #include "StatusAgent.h"
+#include "ConfigurationAgent.h"
+#include "Logger.h"
 
 namespace Applications
 {
-using Hal::Hardware;
-using Hal::WiiNunchuk;
-using Hal::ServoMotor;
-using Hal::DeviceInput;
-using Hal::Laser;
-using Hal::Rng;
+using Utilities::Logger;
 
 LaserControlService::LaserControlService() : cpp_freertos::Thread("LSRVC", configLASERSVC_STACK_DEPTH, 3)
+{
+
+}
+
+LaserControlService::~LaserControlService()
 {
 
 }
@@ -22,43 +21,45 @@ LaserControlService::LaserControlService() : cpp_freertos::Thread("LSRVC", confi
 void LaserControlService::Run()
 {
     Logger::LogInfo(Logger::LogSource::LaserController, "Laser Controller Service Started");
-       
-	bool runningWithController = true;
-    WiiNunchuk& wiiNunchuk = Hardware::Instance()->GetController();
-    ServoMotor& motorY = Hardware::Instance()->GetMotorY();
-    ServoMotor& motorX = Hardware::Instance()->GetMotorX();
+
+	// Initializing the pointers
+	_wiiNunchuk = &Hardware::Instance()->GetController();
+	_motorY = &Hardware::Instance()->GetMotorY();
+    _motorX = &Hardware::Instance()->GetMotorX();
+	_rng = &Hardware::Instance()->GetRng();
+
     Laser& laser = Hardware::Instance()->GetLaser();
    	ApplicationAgent* appAgent = ApplicationAgent::Instance();
-	DeviceInput& deviceInput = Hardware::Instance()->GetDeviceInput();
+
 	uint16_t laserPower = 0;
 	for(;;)
 	{
-		if (wiiNunchuk.IsPresent())
+		if (_wiiNunchuk->IsPresent())
 		{
-			if (!runningWithController)
+			if (!_runningWithController)
 			{
-				wiiNunchuk.Init();
-				runningWithController = true;
-				appAgent->GetMenuService()->UpdateDisplay("Controller\nConnected");
+				_wiiNunchuk->Init();
+				_runningWithController = true;
+				//appAgent->GetMenuService()->UpdateDisplay("Controller\nConnected");
 				Logger::LogInfo(Logger::LogSource::LaserController, "Controller Connected.");
 			}
 		}
 		else
         {
-            if (runningWithController)
+            if (_runningWithController)
             {
-				appAgent->GetMenuService()->UpdateDisplay("Controller\nDisconnected");
+				//appAgent->GetMenuService()->UpdateDisplay("Controller\nDisconnected");
 				Logger::LogInfo(Logger::LogSource::LaserController, "Controller Disconnected.");
             }
-            runningWithController = false;
+            _runningWithController = false;
         }
 
-		if (runningWithController)
+		if (_runningWithController)
 		{
 			vTaskDelay(5);
-			wiiNunchuk.Update();
-			motorY.SetPositon(100 - wiiNunchuk.GetJoystickX());
-			motorX.SetPositon(wiiNunchuk.GetJoystickY());
+			_wiiNunchuk->Update();
+			_motorY->SetPositon(100 - _wiiNunchuk->GetJoystickX());
+			_motorX->SetPositon(_wiiNunchuk->GetJoystickY());
 			vTaskDelay(5);
 		}
 		else
@@ -75,24 +76,20 @@ void LaserControlService::Run()
 
 void LaserControlService::randomPosition()
 {
-	ServoMotor& motorY = Hardware::Instance()->GetMotorY();
-    ServoMotor& motorX = Hardware::Instance()->GetMotorX();
 	uint16_t laserDelay = Status::StatusAgent::Instance()->GetInputStatusList().
 					GetInput(Configuration::InputIndex::PotLaserDelay).GetAnalogLevel();
-    Rng& rng = Hardware::Instance()->GetRng();
-	motorX.SetPositon(rng.GetNumber()%100);
-	motorY.SetPositon(rng.GetNumber()%100);
+    
+	_motorX->SetPositon(_rng->GetNumber()%100);
+	_motorY->SetPositon(_rng->GetNumber()%100);
 
 	if (laserDelay < 300)
 		laserDelay = 300;
 
-	vTaskDelay(laserDelay + rng.GetNumber()%(laserDelay / 2));
+	vTaskDelay(laserDelay + _rng->GetNumber()%(laserDelay / 2));
 }
 
 void LaserControlService::roundEffect()
 {
-ServoMotor& motorY = Hardware::Instance()->GetMotorY();
-    ServoMotor& motorX = Hardware::Instance()->GetMotorX();
 	switch(_roundEffectState)
 	{
 		case LaserRoundEffectStateMachine::RasingXDroppingY:
@@ -125,8 +122,8 @@ ServoMotor& motorY = Hardware::Instance()->GetMotorY();
 			_remoteX = 50;
 			_remoteY = 100;
 	}
-	motorX.SetPositon(_remoteX);
-	motorY.SetPositon(_remoteY);
+	_motorX->SetPositon(_remoteX);
+	_motorY->SetPositon(_remoteY);
 	uint16_t laserDelay = Status::StatusAgent::Instance()->GetInputStatusList().
 				GetInput(Configuration::InputIndex::PotLaserDelay).GetAnalogLevel();
 

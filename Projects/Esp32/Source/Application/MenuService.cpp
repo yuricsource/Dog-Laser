@@ -2,6 +2,7 @@
 #include "ConfigurationAgent.h"
 #include "WebSocket.h"
 #include "Hardware.h"
+#include "ApplicationAgent.h"
 
 namespace Applications
 {
@@ -37,10 +38,25 @@ void MenuService::writeDisplay(const char * message) const
 void MenuService::Run()
 {
     Logger::LogInfo(Logger::LogSource::Menu, "Menu Service Started");
-
+	LaserControlService* laserConterol = ApplicationAgent::Instance()->GetLaserControlService();
+	bool controllerState = true;
 	for(;;)
 	{
-		vTaskDelay(1000);
+		if (laserConterol->IsControllerConnected())
+		{
+			if (!controllerState)
+			{
+				UpdateDisplay("Controller\nConnected");
+				controllerState = true;
+			}
+		}
+		else
+        {
+            if (controllerState)
+            	UpdateDisplay("Controller\nDisconnected");
+            controllerState = false;
+        }
+		Delay(100);
 	}
 }
 

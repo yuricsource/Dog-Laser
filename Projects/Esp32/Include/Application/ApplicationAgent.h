@@ -26,7 +26,7 @@ public:
         return _applications;
     }
 
-    LaserControlService& GetLaserControlService() { return *_laserControlService; }
+    LaserControlService* GetLaserControlService() { return _laserControlService; }
     MenuService* GetMenuService() { return _menuService; }
     InputScannerService* GetInputScannerService() { return _inputScanner; }
 

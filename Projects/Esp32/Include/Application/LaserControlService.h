@@ -4,27 +4,38 @@
 #include "WifiService.h"
 #include "TimeLimit.h"
 #include "ConfigurationCommon.h"
-#include "BaseConnection.h"
-#include "BaseRouteHandler.h"
-#include "TcpConnection.h"
-#include "Logger.h"
-#include "WebSocket.h"
 
 namespace Applications
 {
 
 using Hal::TimeLimit;
-using Utilities::Logger;
+using Hal::Hardware;
+using Hal::WiiNunchuk;
+using Hal::ServoMotor;
+using Hal::DeviceInput;
+using Hal::Laser;
+using Hal::Rng;
 
 class LaserControlService : public cpp_freertos::Thread
 {
 public:
     LaserControlService();
+    ~LaserControlService();
+
+    const bool IsControllerConnected() const
+    {
+        return _runningWithController;
+    }
 
 private:
 
     uint8_t _remoteX = 0;
-    uint8_t _remoteY = 0;
+    uint8_t _remoteY = 0;       
+	bool _runningWithController = true;
+    WiiNunchuk* _wiiNunchuk;
+    ServoMotor* _motorY;
+    ServoMotor* _motorX;
+    Rng* _rng;
 
     enum class LaserRoundEffectStateMachine : uint8_t
     {
