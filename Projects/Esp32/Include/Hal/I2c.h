@@ -4,9 +4,12 @@
 
 #include "HalCommon.h"
 #include "Gpio.h"
+#include "mutex.hpp"
 
 namespace Hal
 {
+using cpp_freertos::LockGuard;
+using cpp_freertos::MutexRecursive;
 class I2c
 {
 public:
@@ -46,6 +49,7 @@ private:
 	I2cPort _i2cPort;
 	Gpio::GpioIndex _sdaPin;
 	Gpio::GpioIndex _sclPin;
+	cpp_freertos::MutexRecursive _i2cLock;
 
 public:
 };

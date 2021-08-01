@@ -32,6 +32,7 @@ I2c::~I2c()
 
 void I2c::ScanDevices()
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     uint8_t i = 0;
 	bool espRc = false;
     printf("\n\n");
@@ -53,6 +54,7 @@ void I2c::ScanDevices()
 
 bool I2c::IsDeviceConnected(uint8_t address)
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     i2c_master_write_byte(cmd, (address << 1) | I2C_MASTER_WRITE, AckCheck);
@@ -69,6 +71,7 @@ bool I2c::IsDeviceConnected(uint8_t address)
 
 bool I2c::BeginTransmission(uint8_t address)
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     i2c_master_write_byte(cmd, (address << 1) | I2C_MASTER_READ, AckCheck);
@@ -84,6 +87,7 @@ bool I2c::BeginTransmission(uint8_t address)
 
 bool I2c::Send(uint8_t byte)
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_write_byte(cmd, byte | I2C_MASTER_WRITE, AckCheck);
     esp_err_t ret = i2c_master_cmd_begin(static_cast<i2c_port_t>(_i2cPort), cmd, 10 / portTICK_RATE_MS);
@@ -97,6 +101,7 @@ bool I2c::Send(uint8_t byte)
 
 bool I2c::EndTransmission()
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_stop(cmd);
     esp_err_t ret = i2c_master_cmd_begin(static_cast<i2c_port_t>(_i2cPort), cmd, 10 / portTICK_RATE_MS);
@@ -107,6 +112,7 @@ bool I2c::EndTransmission()
 
 bool I2c::Write(uint8_t slave_addr, uint8_t *data, uint8_t len)
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     if (len == 0)
         return false;
 
@@ -135,6 +141,7 @@ bool I2c::Write(uint8_t slave_addr, uint8_t *data, uint8_t len)
 
 bool I2c::WriteRegister(uint8_t slave_addr, uint8_t byteRegister, uint8_t byte)
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     uint8_t commandByte[2] = {byteRegister, byte};
@@ -149,6 +156,7 @@ bool I2c::WriteRegister(uint8_t slave_addr, uint8_t byteRegister, uint8_t byte)
 
 bool I2c::ReadRegister(uint8_t slave_addr, uint8_t byteRegister, uint8_t * byte)
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     i2c_master_write_byte(cmd, (slave_addr << 1) | I2C_MASTER_READ, AckCheck);
@@ -164,6 +172,7 @@ bool I2c::Read(uint8_t slave_addr, uint8_t *data, uint32_t len)
 {
     if (len == 0)
         return false;
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
@@ -187,6 +196,7 @@ bool I2c::RequestFrom(uint8_t slave_addr, uint32_t len)
 {
     if (len == 0)
         return false;
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
 
     uint8_t data = 0;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
@@ -209,6 +219,7 @@ bool I2c::RequestFrom(uint8_t slave_addr, uint32_t len)
 
 uint8_t I2c::Receive()
 {
+    cpp_freertos::LockGuard i2cGuard(_i2cLock);
     uint8_t data = 0;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
