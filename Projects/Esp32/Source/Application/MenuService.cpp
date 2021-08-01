@@ -13,7 +13,7 @@ MenuService::MenuService() : cpp_freertos::Thread("MENUSVC", configMENUSVC_STACK
 	_stateMachine = MenuStateMachine::Idle;
 }
 
-bool MenuService::UpdateDisplay(const char * message) const
+bool MenuService::updateDisplay(const char * message) const
 {
 	if (_stateMachine == MenuStateMachine::Idle)
 	{
@@ -46,14 +46,14 @@ void MenuService::Run()
 		{
 			if (!controllerState)
 			{
-				UpdateDisplay("Controller\nConnected");
+				updateDisplay("Controller\nConnected");
 				controllerState = true;
 			}
 		}
 		else
         {
             if (controllerState)
-            	UpdateDisplay("Controller\nDisconnected");
+            	updateDisplay("Controller\nDisconnected");
             controllerState = false;
         }
 		Delay(100);

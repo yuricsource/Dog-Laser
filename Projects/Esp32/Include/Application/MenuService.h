@@ -21,7 +21,6 @@ class MenuService : public cpp_freertos::Thread
 {
 public:
     MenuService();
-    bool UpdateDisplay(const char * message) const;
 private:
     enum class MenuStateMachine: uint16_t
     {
@@ -29,6 +28,8 @@ private:
     };
     MenuStateMachine _stateMachine;
     Adafruit_SSD1306* _display;
+
+    bool updateDisplay(const char * message) const;
 
     void writeDisplay(const char * message) const;
 
