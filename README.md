@@ -13,3 +13,7 @@ This project was 3D/hardware/firmware designed 100% by me. The firmware implemen
 
 Este hardware possui baterias recarregáveis e uma caixa para acomodar o hardware e os motores a laser.
 ![](Documentation/Laser%20box.png)
+
+
+How it looks like:
+![](Documentation/result.jpg)
