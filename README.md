@@ -11,7 +11,7 @@ So I created one that plays with her. For her safety, this laser is power adjust
 
 This project was 3D/hardware/firmware designed 100% by me. The firmware implementation is done with embeded C++ and FreeRTOS on the ESP32 microcontroller.
 
-Este hardware possui baterias recarregáveis e uma caixa para acomodar o hardware e os motores a laser.
+This hardware has rechargeable batteries and a box to accommodate the hardware and laser motors.
 ![](Documentation/Laser%20box.png)
 
 
