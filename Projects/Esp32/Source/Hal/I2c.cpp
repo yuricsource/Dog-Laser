@@ -14,7 +14,7 @@ I2c::I2c(Gpio *IoPins, I2cPort i2cPort, Gpio::GpioIndex Sda, Gpio::GpioIndex Scl
     _gpio->SetAlternate(_sclPin, Gpio::AltFunc::I2c);
     _gpio->SetAlternate(_sdaPin, Gpio::AltFunc::I2c);
 
-    i2c_config_t conf;
+    i2c_config_t conf = {};
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = static_cast<gpio_num_t>(_sdaPin);
     conf.sda_pullup_en = GPIO_PULLUP_ENABLE;

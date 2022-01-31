@@ -186,7 +186,7 @@ bool WifiDriver::Enable()
 		assert(nullptr);
 	}
 
-	esp_wifi_set_config(wifiMode, &wifi_config);
+	// esp_wifi_set_config(wifiMode, &wifi_config);
 
 	_isEnabled = true;
 
